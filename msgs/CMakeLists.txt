@@ -1,0 +1,67 @@
+# 2.8.8 required to use PROTOBUF_IMPORT_DIRS
+cmake_minimum_required(VERSION 2.8.8 FATAL_ERROR)
+
+# Find Protobuf package
+find_package(Protobuf REQUIRED)
+
+# Obtain Protobuf import directories
+set(PROTOBUF_IMPORT_DIRS)
+foreach(ITR ${GAZEBO_INCLUDE_DIRS})
+  if(ITR MATCHES ".*gazebo-[0-9.]+$")
+    set(PROTOBUF_IMPORT_DIRS "${ITR}/gazebo/msgs/proto")
+  endif()
+endforeach()
+
+# Get list of every proto source
+# Slight overhead in compilation
+file(GLOB PROTOBUF_SOURCES ${PROTOBUF_IMPORT_DIRS}/*.proto)
+
+# Obtain set of proto messages definitions
+set (msgs
+  # Custom messages
+  target.proto
+  hand.proto
+  # Grasp target messages
+  target_request.proto
+  target_response.proto
+  # Camera messages
+  camera_request.proto
+  camera_response.proto
+  # Contact sensor messages
+  contact_sensor_request.proto
+  contact_sensor_response.proto
+  # Contact messages
+  contact_request.proto
+  contact_response.proto
+  my_msg.proto
+  # Message dependencies
+  ${PROTOBUF_SOURCES}
+)
+
+# Generate Protobuf sources
+PROTOBUF_GENERATE_CPP(PROTO_SRCS PROTO_HDRS ${msgs})
+# Compile shared library
+add_library(grasp_msgs SHARED ${PROTO_SRCS})
+# Link Protobuf library
+target_link_libraries(grasp_msgs ${PROTOBUF_LIBRARY})
+
+# Obtain header include string
+set (headers_list)
+foreach(FIL ${msgs})
+  get_filename_component(FIL_WE ${FIL} NAME_WE)
+  set(headers_list ${headers_list} "\n\#include \"${FIL_WE}.pb.h\"")
+endforeach()
+string(REPLACE ";" "" message_headers "${headers_list}")
+
+# Configure header for message types
+configure_file (${PROJECT_SOURCE_DIR}/msgs/MessageTypes.hh.in
+  ${CMAKE_CURRENT_BINARY_DIR}/MessageTypes.hh )
+# Configure header for default message topics 
+configure_file (${PROJECT_SOURCE_DIR}/msgs/MessageTopics.hh.in
+  ${CMAKE_CURRENT_BINARY_DIR}/MessageTopics.hh )
+
+# Install library
+install(TARGETS grasp_msgs
+  DESTINATION "${msgs_lib_dest}")
+install(FILES ${PROTO_HDRS}
+  DESTINATION "${msgs_include_dest}")

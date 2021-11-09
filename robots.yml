@@ -1,0 +1,15 @@
+# Robotic hand parameters
+
+# Vizzy's right hand
+vizzy:
+  name: vizzy_right_hand
+  path: models/vizzy_right_hand.urdf
+  palm_normal: "0 -1 0"
+  palm_offset: 0.01
+  pose: [0.0,0.0,0.0,0.0,0.0,0.0]
+  grasp_configurations:
+    cylindrical:
+      r_thumb_phal_1_joint: {pre: 0.0, post: 75, force: 2}
+      r_ind_phal_1_joint:   {pre: 0.0, post: 112.5, force: 2}
+      r_med_phal_1_joint:   {pre: 0.0, post: 112.5, force: 2}
+

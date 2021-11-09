@@ -1,0 +1,29 @@
+syntax = "proto2";
+package grasp.msgs;
+
+/// \ingroup grasp_msgs
+/// \interface Target
+/// \brief TODO
+
+message Target
+{
+    /// Type of PID control target
+    enum Type
+    {
+        /// Apply constant force/torque
+        FORCE    = 1;
+        /// Position target
+        POSITION = 2;
+        /// Velocity target
+        VELOCITY = 3;
+    }
+
+    /// Type of PID control target
+    required Type       type    = 1;
+    /// Joint name
+    required string     joint   = 2;
+    /// Target
+    required double     value   = 3;
+    /// Reference
+    optional double       reference = 4;
+}

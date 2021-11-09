@@ -1,0 +1,38 @@
+syntax = "proto2";
+package grasp.msgs;
+
+/// \ingroup grasp_msgs
+/// \interface Contact Request
+/// \brief Contact plugin request
+
+import "surface.proto";
+
+message ContactRequest
+{
+    /// Collision pairs to test for contacts
+    repeated CollisionRequest collision = 1;
+    /// New friction properties for a given collision
+    repeated SurfaceRequest surface     = 2;
+}
+
+/// Pair of collision entities
+message CollisionRequest
+{
+    /// First collision object
+    optional string collision1 = 1;
+    /// Second collision object
+    optional string collision2 = 2;   
+}
+
+/// Request to change surface properties
+message SurfaceRequest
+{
+    /// Model name
+    required string model       = 1;
+    /// Link name
+    required string link        = 2;
+    /// Collision name
+    required string collision   = 3;
+    /// Surface
+    required gazebo.msgs.Surface surface = 4;
+}

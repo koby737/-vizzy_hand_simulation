@@ -1,0 +1,25 @@
+syntax = "proto2";
+package grasp.msgs;
+
+/// \ingroup grasp_msgs
+/// \interface Hand
+/// \brief TODO
+
+import "pose.proto";
+import "target.proto";
+
+message Hand
+{
+    /// New hand pose
+    optional gazebo.msgs.Pose   pose                = 1;
+    /// New pid targets
+    repeated Target             pid_targets         = 2;
+    /// Force joint position to target
+    optional bool 		force_target 	    = 3;
+    /// Controller timeout
+    optional double             timeout             = 4;
+    /// Reset
+    optional bool               reset               = 5;
+    optional bool               measure             = 6;
+    optional bool               interruptor         = 7;
+}

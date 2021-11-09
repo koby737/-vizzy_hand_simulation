@@ -1,0 +1,12 @@
+syntax = "proto2";
+package grasp.msgs;
+
+message Contact
+{
+    /// Collision object
+    required string name = 1;
+    required float xforce = 2;
+    required float yforce = 3;
+    required float zforce = 4;
+    optional float depth = 5;
+}
